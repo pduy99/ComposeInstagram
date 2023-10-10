@@ -17,6 +17,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 
+/**
+ * Composable function that displays a loading overlay on top of its content when
+ * the 'isLoading' flag is set to true. This overlay includes a grayed-out background,
+ * a loading spinner, and an optional loading text.
+ *
+ * @param modifier The modifier for positioning and sizing the LoadingOverlayBox.
+ * @param isLoading A boolean flag indicating whether the loading overlay should be shown.
+ * @param loadingText The text to be displayed below the loading spinner.
+ * @param content The composable content that will be displayed beneath the loading overlay.
+ */
 @Composable
 fun LoadingOverlayBox(
     modifier: Modifier = Modifier,
