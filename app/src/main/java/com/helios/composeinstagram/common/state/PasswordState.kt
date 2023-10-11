@@ -52,7 +52,7 @@ private fun passwordConfirmationError(): String {
     return "Passwords don't match"
 }
 
-enum class PasswordRules(val validator: (String) -> Boolean, val errorMessage: String) {
+private enum class PasswordRules(val validator: (String) -> Boolean, val errorMessage: String) {
     AT_LEAST_EIGHT_CHARACTERS(
         validator = { it.length >= 8 },
         errorMessage = "Password must have at least 8 characters"

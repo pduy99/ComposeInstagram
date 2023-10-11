@@ -4,7 +4,7 @@ import java.util.regex.Pattern
 
 private const val EMAIL_VALIDATION_REGEX = "^(.+)@(.+)\$"
 
-class EmailState(val email: String? = null) : TextFieldState(
+class EmailState(email: String? = null) : TextFieldState(
     validator = ::isEmailValid, errorFor = ::emailValidationError
 ) {
     init {
@@ -22,4 +22,4 @@ private fun isEmailValid(email: String): Boolean {
     return Pattern.matches(EMAIL_VALIDATION_REGEX, email)
 }
 
-val EmailStateSaver = textFieldStateSaver(EmailState())
+internal val EmailStateSaver = textFieldStateSaver(EmailState())
