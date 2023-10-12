@@ -1,5 +1,6 @@
 package com.helios.composeinstagram.presentation.signup
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -22,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -36,10 +38,13 @@ import com.helios.instagramclone.R
 @Composable
 fun SignUpScreen(modifier: Modifier = Modifier) {
     val focusManager = LocalFocusManager.current
+    val context = LocalContext.current
     val viewModel = hiltViewModel<SignUpViewModel>()
     val uiState by viewModel.uiState.collectAsState()
+    val isLoading by viewModel.isLoading.collectAsState()
+    val errorEvent by viewModel.errorEvent.collectAsState()
 
-    LoadingOverlayBox(isLoading = false, modifier = modifier) {
+    LoadingOverlayBox(isLoading = isLoading, modifier = modifier) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -78,10 +83,12 @@ fun SignUpScreen(modifier: Modifier = Modifier) {
             Button(
                 onClick = {
                     focusManager.clearFocus(force = true)
+                    viewModel.signup()
                 }, modifier = Modifier
                     .padding(top = 16.dp)
                     .width(280.dp),
-                shape = RectangleShape
+                shape = RectangleShape,
+                enabled = uiState.isButtonEnabled
             ) {
                 Text(text = "SIGNUP")
             }
@@ -110,6 +117,10 @@ fun SignUpScreen(modifier: Modifier = Modifier) {
                 }
             }
         }
+    }
+
+    errorEvent.getContentOrNull()?.let {
+        Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
     }
 }
 
