@@ -15,7 +15,7 @@ sealed class DataResult<out R> {
 
     data class Success<out T>(val data: T) : DataResult<T>()
 
-    data class Error(val throwable: Throwable) : DataResult<Throwable>()
+    data class Error(val throwable: Throwable) : DataResult<Nothing>()
 }
 
 inline fun <reified R> DataResult<R>.doIfSuccess(callback: (value: R) -> Unit) {

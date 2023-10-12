@@ -2,11 +2,10 @@ package com.helios.composeinstagram.common.view
 
 class ErrorEvent(private val content: String) {
 
-    var hasBeenHandled: Boolean = false
-        private set
+    private var hasBeenHandled: Boolean = false
 
     fun getContentOrNull(): String? {
-        return if (hasBeenHandled) {
+        return if (hasBeenHandled || content.isBlank()) {
             null
         } else {
             hasBeenHandled = true
