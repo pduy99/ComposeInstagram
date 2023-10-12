@@ -32,7 +32,8 @@ fun PasswordTextField(
         value = passwordState.text,
         onValueChange = {
             passwordState.text = it
-            passwordState.enableShowErrors() },
+            passwordState.enableShowErrors()
+        },
         label = {
             Text(text = "Password", style = MaterialTheme.typography.bodyMedium)
         },
@@ -54,11 +55,17 @@ fun PasswordTextField(
         trailingIcon = {
             if (showPassword.value) {
                 IconButton(onClick = { showPassword.value = false }) {
-                    Icon(imageVector = Icons.Filled.Visibility, contentDescription = "hide password")
+                    Icon(
+                        imageVector = Icons.Filled.Visibility,
+                        contentDescription = "hide password"
+                    )
                 }
             } else {
                 IconButton(onClick = { showPassword.value = true }) {
-                    Icon(imageVector = Icons.Filled.VisibilityOff, contentDescription = "show password")
+                    Icon(
+                        imageVector = Icons.Filled.VisibilityOff,
+                        contentDescription = "show password"
+                    )
                 }
             }
         },

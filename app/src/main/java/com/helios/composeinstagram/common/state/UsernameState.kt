@@ -1,9 +1,14 @@
 package com.helios.composeinstagram.common.state
 
-class UsernameState: TextFieldState(
+class UsernameState(initialText: String? = null) : TextFieldState(
     validator = ::isUsernameValid,
-    errorFor = :: usernameValidationError
+    errorFor = ::usernameValidationError
 ) {
+    init {
+        initialText?.let {
+            text = it
+        }
+    }
 }
 
 
