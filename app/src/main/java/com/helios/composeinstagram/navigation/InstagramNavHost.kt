@@ -21,7 +21,7 @@ fun InstagramNavHost(navController: NavHostController, modifier: Modifier = Modi
     NavHost(
         navController = navController,
         modifier = modifier,
-        startDestination = AppDestination.Home.name,
+        startDestination = AppDestination.SignIn.name,
         enterTransition = {
             fadeIn(
                 animationSpec = tween(
@@ -46,6 +46,11 @@ fun InstagramNavHost(navController: NavHostController, modifier: Modifier = Modi
             SignInScreen(
                 onNavigateToSignUpScreen = {
                     navController.navigate(AppDestination.Signup.name) {
+                        popUpTo(0)
+                    }
+                },
+                onSignInSuccess = {
+                    navController.navigate(AppDestination.Home.name) {
                         popUpTo(0)
                     }
                 }

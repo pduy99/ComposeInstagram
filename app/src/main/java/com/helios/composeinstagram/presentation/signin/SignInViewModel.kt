@@ -36,11 +36,11 @@ class SignInViewModel @Inject constructor(
                 is DataResult.Success -> {
                     hideLoading()
                     Log.d(TAG, "Success")
+                    _uiState.value = _uiState.value.copy(isSignInSuccess = true)
                 }
 
                 is DataResult.Error -> {
                     hideLoading()
-                    it.throwable.printStackTrace()
                     setError(it.throwable.localizedMessage ?: "Something went wrong")
                 }
             }
@@ -51,6 +51,7 @@ class SignInViewModel @Inject constructor(
 data class SignInViewState(
     val emailState: EmailState = EmailState(),
     val passwordState: PasswordState = PasswordState(),
+    val isSignInSuccess: Boolean = false
 ) {
     val isButtonEnabled: Boolean
         get() {
