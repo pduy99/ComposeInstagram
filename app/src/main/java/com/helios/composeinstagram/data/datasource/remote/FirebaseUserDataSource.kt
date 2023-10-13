@@ -13,8 +13,6 @@ import com.helios.composeinstagram.data.model.User
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 private const val TAG = "FirebaseUserDataSource"
@@ -36,23 +34,24 @@ class FirebaseUserDataSource @Inject constructor(
             awaitClose()
         }
 
-    override fun getCurrentUser(): Flow<DataResult<User?>> = flow {
-        emit(DataResult.Loading)
+    override fun getCurrentUser(): Flow<DataResult<User?>> = callbackFlow {
+        trySend(DataResult.Loading)
         try {
             auth.currentUser?.uid?.let { userId ->
-                getUserByUserId(userId).map { dataResult ->
+                getUserByUserId(userId).collect { dataResult ->
                     dataResult.doIfSuccess { user ->
-                        emit(DataResult.Success(user))
+                        trySend(DataResult.Success(user))
                     }
                     dataResult.doIfError { throwable ->
-                        emit(DataResult.Error(throwable))
+                        trySend(DataResult.Error(throwable))
                     }
                 }
-            } ?: emit(DataResult.Error(Exception("Current user not found")))
+            } ?: trySend(DataResult.Success(null))
         } catch (exception: Exception) {
-            emit(DataResult.Error(exception))
+            trySend(DataResult.Error(exception))
         }
 
+        awaitClose()
     }
 
     override fun getUserByUserName(userName: String): Flow<DataResult<User?>> = callbackFlow {

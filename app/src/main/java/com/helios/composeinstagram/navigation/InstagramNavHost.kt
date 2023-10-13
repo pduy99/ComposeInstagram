@@ -15,13 +15,14 @@ import androidx.navigation.compose.composable
 import com.helios.composeinstagram.presentation.home.HomeScreen
 import com.helios.composeinstagram.presentation.signin.SignInScreen
 import com.helios.composeinstagram.presentation.signup.SignUpScreen
+import com.helios.composeinstagram.presentation.splash.SplashScreen
 
 @Composable
 fun InstagramNavHost(navController: NavHostController, modifier: Modifier = Modifier) {
     NavHost(
         navController = navController,
         modifier = modifier,
-        startDestination = AppDestination.SignIn.name,
+        startDestination = AppDestination.SlashScreen.name,
         enterTransition = {
             fadeIn(
                 animationSpec = tween(
@@ -42,6 +43,17 @@ fun InstagramNavHost(navController: NavHostController, modifier: Modifier = Modi
                 towards = AnimatedContentTransitionScope.SlideDirection.End
             )
         }) {
+        composable(route = AppDestination.SlashScreen.name) {
+            SplashScreen(onSignedIn = {
+                navController.navigate(AppDestination.Home.name) {
+                    popUpTo(0)
+                }
+            }, onNeedSignIn = {
+                navController.navigate(AppDestination.SignIn.name) {
+                    popUpTo(0)
+                }
+            })
+        }
         composable(route = AppDestination.SignIn.name) {
             SignInScreen(
                 onNavigateToSignUpScreen = {
