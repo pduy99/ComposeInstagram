@@ -7,7 +7,7 @@ import androidx.compose.runtime.setValue
 
 open class TextFieldState(
     private val validator: (String) -> Boolean = { true },
-    private val errorFor: (String) -> String = { "" }
+    private val errorFor: (String) -> String = { "" },
 ) {
     var text: String by mutableStateOf("")
     var wasEverFocus: Boolean by mutableStateOf(false)

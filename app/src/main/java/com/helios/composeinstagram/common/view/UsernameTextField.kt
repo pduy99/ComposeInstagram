@@ -19,6 +19,7 @@ import com.helios.composeinstagram.common.state.UsernameState
 fun UsernameTextField(
     modifier: Modifier = Modifier,
     usernameState: UsernameState = remember { UsernameState() },
+    enableShowError: Boolean = true
 ) {
 
     OutlinedTextField(
@@ -31,7 +32,7 @@ fun UsernameTextField(
             .fillMaxWidth()
             .onFocusChanged {
                 usernameState.onFocusChange(it.isFocused)
-                if (!it.isFocused) {
+                if (enableShowError && !it.isFocused) {
                     usernameState.enableShowErrors()
                 }
             },
