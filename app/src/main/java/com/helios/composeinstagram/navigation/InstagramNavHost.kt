@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.helios.composeinstagram.presentation.home.HomeScreen
 import com.helios.composeinstagram.presentation.signin.SignInScreen
 import com.helios.composeinstagram.presentation.signup.SignUpScreen
 
@@ -47,6 +48,11 @@ fun InstagramNavHost(navController: NavHostController, modifier: Modifier = Modi
                     navController.navigate(AppDestination.Signup.name) {
                         popUpTo(0)
                     }
+                },
+                onSignInSuccess = {
+                    navController.navigate(AppDestination.Home.name) {
+                        popUpTo(0)
+                    }
                 }
             )
         }
@@ -56,6 +62,9 @@ fun InstagramNavHost(navController: NavHostController, modifier: Modifier = Modi
                     popUpTo(0)
                 }
             })
+        }
+        composable(route = AppDestination.Home.name) {
+            HomeScreen()
         }
     }
 }

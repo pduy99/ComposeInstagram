@@ -19,6 +19,7 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -38,7 +39,8 @@ import com.helios.instagramclone.R
 @Composable
 fun SignInScreen(
     modifier: Modifier = Modifier,
-    onNavigateToSignUpScreen: () -> Unit
+    onNavigateToSignUpScreen: () -> Unit,
+    onSignInSuccess: () -> Unit
 ) {
     val viewModel = hiltViewModel<SignInViewModel>()
     val isLoading by viewModel.isLoading.collectAsState()
@@ -46,6 +48,12 @@ fun SignInScreen(
     val uiState by viewModel.uiState.collectAsState()
     val focusManager = LocalFocusManager.current
     val context = LocalContext.current
+
+    LaunchedEffect(key1 = uiState.isSignInSuccess) {
+        if (uiState.isSignInSuccess) {
+            onSignInSuccess()
+        }
+    }
 
     LoadingOverlayBox(modifier = modifier, isLoading = isLoading) {
         Column(
