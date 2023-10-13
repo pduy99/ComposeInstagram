@@ -1,5 +1,12 @@
 package com.helios.composeinstagram.navigation
 
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.EaseIn
+import androidx.compose.animation.core.EaseOut
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -10,12 +17,45 @@ import com.helios.composeinstagram.presentation.signup.SignUpScreen
 
 @Composable
 fun InstagramNavHost(navController: NavHostController, modifier: Modifier = Modifier) {
-    NavHost(navController = navController, modifier = modifier, startDestination = AppDestination.SignIn.name) {
+    NavHost(
+        navController = navController,
+        modifier = modifier,
+        startDestination = AppDestination.SignIn.name,
+        enterTransition = {
+            fadeIn(
+                animationSpec = tween(
+                    300, easing = LinearEasing
+                )
+            ) + slideIntoContainer(
+                animationSpec = tween(300, easing = EaseIn),
+                towards = AnimatedContentTransitionScope.SlideDirection.Start
+            )
+        },
+        exitTransition = {
+            fadeOut(
+                animationSpec = tween(
+                    300, easing = LinearEasing
+                )
+            ) + slideOutOfContainer(
+                animationSpec = tween(300, easing = EaseOut),
+                towards = AnimatedContentTransitionScope.SlideDirection.End
+            )
+        }) {
         composable(route = AppDestination.SignIn.name) {
-            SignInScreen()
+            SignInScreen(
+                onNavigateToSignUpScreen = {
+                    navController.navigate(AppDestination.Signup.name) {
+                        popUpTo(0)
+                    }
+                }
+            )
         }
         composable(route = AppDestination.Signup.name) {
-            SignUpScreen()
+            SignUpScreen(onNavigateToSignInScreen = {
+                navController.navigate(AppDestination.SignIn.name) {
+                    popUpTo(0)
+                }
+            })
         }
     }
 }

@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -15,6 +16,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -36,6 +38,7 @@ import com.helios.instagramclone.R
 @Composable
 fun SignInScreen(
     modifier: Modifier = Modifier,
+    onNavigateToSignUpScreen: () -> Unit
 ) {
     val viewModel = hiltViewModel<SignInViewModel>()
     val isLoading by viewModel.isLoading.collectAsState()
@@ -60,9 +63,10 @@ fun SignInScreen(
                 contentDescription = "logo",
                 modifier = Modifier
                     .width(250.dp)
-                    .padding(top = 16.dp)
-                    .padding(8.dp)
+                    .padding(16.dp)
             )
+
+            Spacer(modifier = Modifier.height(25.dp))
 
             EmailTextField(
                 modifier = Modifier.padding(horizontal = 16.dp),
@@ -101,7 +105,8 @@ fun SignInScreen(
                         text = "Don't have an account?",
                         color = Color.Gray,
                         modifier = Modifier
-                            .padding(end = 5.dp)
+                            .padding(end = 5.dp),
+                        style = MaterialTheme.typography.labelMedium
                     )
 
                     Text(
@@ -109,8 +114,10 @@ fun SignInScreen(
                         color = Color.Blue,
                         modifier = Modifier
                             .clickable {
-
-                            })
+                                onNavigateToSignUpScreen()
+                            },
+                        style = MaterialTheme.typography.labelMedium
+                    )
                 }
             }
         }

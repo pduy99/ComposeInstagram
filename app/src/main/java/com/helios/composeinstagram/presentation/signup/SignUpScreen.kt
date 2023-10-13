@@ -15,6 +15,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -26,7 +27,6 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.helios.composeinstagram.common.view.EmailTextField
@@ -36,7 +36,10 @@ import com.helios.composeinstagram.common.view.UsernameTextField
 import com.helios.instagramclone.R
 
 @Composable
-fun SignUpScreen(modifier: Modifier = Modifier) {
+fun SignUpScreen(
+    modifier: Modifier = Modifier,
+    onNavigateToSignInScreen: () -> Unit
+) {
     val focusManager = LocalFocusManager.current
     val context = LocalContext.current
     val viewModel = hiltViewModel<SignUpViewModel>()
@@ -105,7 +108,8 @@ fun SignUpScreen(modifier: Modifier = Modifier) {
                         text = "Already has an account?",
                         color = Color.Gray,
                         modifier = Modifier
-                            .padding(top = 16.dp, end = 5.dp)
+                            .padding(top = 16.dp, end = 5.dp),
+                        style = MaterialTheme.typography.labelMedium
                     )
 
                     Text(
@@ -113,7 +117,11 @@ fun SignUpScreen(modifier: Modifier = Modifier) {
                         color = Color.Blue,
                         modifier = Modifier
                             .padding(top = 16.dp)
-                            .clickable { })
+                            .clickable {
+                                onNavigateToSignInScreen()
+                            },
+                        style = MaterialTheme.typography.labelMedium
+                    )
                 }
             }
         }
@@ -122,10 +130,4 @@ fun SignUpScreen(modifier: Modifier = Modifier) {
     errorEvent.getContentOrNull()?.let {
         Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun SignUpScreenPreview() {
-    SignUpScreen()
 }
