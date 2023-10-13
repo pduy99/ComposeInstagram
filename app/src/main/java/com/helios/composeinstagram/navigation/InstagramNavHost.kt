@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.helios.composeinstagram.presentation.home.HomeScreen
 import com.helios.composeinstagram.presentation.signin.SignInScreen
 import com.helios.composeinstagram.presentation.signup.SignUpScreen
 
@@ -20,7 +21,7 @@ fun InstagramNavHost(navController: NavHostController, modifier: Modifier = Modi
     NavHost(
         navController = navController,
         modifier = modifier,
-        startDestination = AppDestination.SignIn.name,
+        startDestination = AppDestination.Home.name,
         enterTransition = {
             fadeIn(
                 animationSpec = tween(
@@ -56,6 +57,9 @@ fun InstagramNavHost(navController: NavHostController, modifier: Modifier = Modi
                     popUpTo(0)
                 }
             })
+        }
+        composable(route = AppDestination.Home.name) {
+            HomeScreen()
         }
     }
 }
