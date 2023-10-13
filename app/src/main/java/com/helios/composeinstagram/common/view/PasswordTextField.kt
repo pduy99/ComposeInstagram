@@ -23,7 +23,8 @@ import com.helios.composeinstagram.common.state.PasswordState
 @Composable
 fun PasswordTextField(
     modifier: Modifier = Modifier,
-    passwordState: PasswordState = remember { PasswordState() }
+    passwordState: PasswordState = remember { PasswordState() },
+    enableShowError: Boolean = true
 ) {
     val showPassword = remember {
         mutableStateOf(false)
@@ -32,7 +33,9 @@ fun PasswordTextField(
         value = passwordState.text,
         onValueChange = {
             passwordState.text = it
-            passwordState.enableShowErrors()
+            if (enableShowError) {
+                passwordState.enableShowErrors()
+            }
         },
         label = {
             Text(text = "Password", style = MaterialTheme.typography.bodyMedium)
@@ -41,7 +44,7 @@ fun PasswordTextField(
             .fillMaxWidth()
             .onFocusChanged {
                 passwordState.onFocusChange(it.isFocused)
-                if (!it.isFocused) {
+                if (enableShowError && !it.isFocused) {
                     passwordState.enableShowErrors()
                 }
             },

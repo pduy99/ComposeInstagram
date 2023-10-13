@@ -19,6 +19,7 @@ import com.helios.composeinstagram.common.state.EmailState
 fun EmailTextField(
     modifier: Modifier = Modifier,
     emailState: EmailState = remember { EmailState() },
+    enabledShowError: Boolean = true
 ) {
 
     OutlinedTextField(
@@ -31,7 +32,7 @@ fun EmailTextField(
             .fillMaxWidth()
             .onFocusChanged {
                 emailState.onFocusChange(it.isFocused)
-                if (!it.isFocused) {
+                if (enabledShowError && !it.isFocused) {
                     emailState.enableShowErrors()
                 }
             },
