@@ -1,13 +1,14 @@
 package com.helios.composeinstagram.data.model
 
 data class User(
-    var userId: String? = null,
-    var name: String? = null,
-    var username: String? = null,
-    var email: String? = null,
-    var imageUrl: String? = null,
-    var bio: String? = null,
-    var following: List<String>? = null
+    val userId: String? = null,
+    val name: String? = null,
+    val username: String? = null,
+    val email: String? = null,
+    val imageUrl: String? = null,
+    val bio: String? = null,
+    val gender: String? = null,
+    val following: List<String>? = null
 ) {
     fun toMap() = mapOf(
         USER_ID to userId,
