@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.helios.composeinstagram.navigation.bottomnavigation.BottomNavigationItem
 import com.helios.composeinstagram.navigation.bottomnavigation.BottomNavigationMenu
+import com.helios.composeinstagram.presentation.profile.ProfileScreen
 
 @Composable
 fun HomeScreen(modifier: Modifier = Modifier) {
@@ -25,7 +26,9 @@ fun HomeScreen(modifier: Modifier = Modifier) {
                 }
 
                 BottomNavigationItem.PROFILE -> {
+                    ProfileScreen {
 
+                    }
                 }
 
                 BottomNavigationItem.SEARCH -> {

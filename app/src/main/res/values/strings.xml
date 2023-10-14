@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">ComposeInstagram</string>
+    <string name="posts">Posts</string>
+    <string name="tags">Tags</string>
 </resources>
