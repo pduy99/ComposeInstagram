@@ -3,14 +3,20 @@ package com.helios.composeinstagram.presentation.profile
 import androidx.lifecycle.viewModelScope
 import com.helios.composeinstagram.common.view.BaseViewModel
 import com.helios.composeinstagram.common.view.DataResult
+import com.helios.composeinstagram.common.view.doIfError
+import com.helios.composeinstagram.common.view.doIfSuccess
 import com.helios.composeinstagram.data.model.User
 import com.helios.composeinstagram.data.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,23 +28,21 @@ class ProfileViewModel @Inject constructor(
     val uiState: StateFlow<ProfileUiState> = _uiState.asStateFlow()
 
     init {
-        userRepository.getCurrentUser().onEach {
-            when (it) {
-                is DataResult.Loading -> {
-                    showLoading()
-                }
-
-                is DataResult.Success -> {
-                    hideLoading()
-                    _uiState.value = _uiState.value.copy(it.data)
-                }
-
-                is DataResult.Error -> {
-                    hideLoading()
-                    setError(it.throwable.localizedMessage ?: "Something went wrong")
-                }
+        fun handleGetCurrentResult(result: DataResult<User?>) {
+            result.doIfSuccess {
+                _uiState.value = _uiState.value.copy(userData = it)
             }
-        }.launchIn(viewModelScope)
+            result.doIfError {
+                setError(it.localizedMessage ?: "Something went wrong")
+            }
+        }
+
+        userRepository.getCurrentUser()
+            .onStart { showLoading() }
+            .flowOn(Dispatchers.IO)
+            .onEach { handleGetCurrentResult(it) }
+            .onCompletion { hideLoading() }
+            .launchIn(viewModelScope)
     }
 
     fun updateActiveTab(newActiveTab: ProfileTab) {

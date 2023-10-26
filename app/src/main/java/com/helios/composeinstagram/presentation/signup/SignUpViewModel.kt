@@ -7,18 +7,26 @@ import com.helios.composeinstagram.common.state.PasswordState
 import com.helios.composeinstagram.common.state.UsernameState
 import com.helios.composeinstagram.common.view.BaseViewModel
 import com.helios.composeinstagram.common.view.DataResult
+import com.helios.composeinstagram.common.view.doIfError
+import com.helios.composeinstagram.common.view.doIfSuccess
+import com.helios.composeinstagram.data.model.User
 import com.helios.composeinstagram.data.repository.UserRepository
+import com.helios.composeinstagram.domain.usecases.SignUpUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
-    private val userRepository: UserRepository
+    private val signUpUseCase: SignUpUseCase
 ) : BaseViewModel() {
 
     private val _uiState: MutableStateFlow<SignUpViewState> = MutableStateFlow(SignUpViewState())
@@ -29,25 +37,18 @@ class SignUpViewModel @Inject constructor(
         val password = _uiState.value.passwordState.text
         val email = _uiState.value.emailState.text
 
-        userRepository.createUser(email, password, username).onEach {
-            when (it) {
-                is DataResult.Loading -> {
-                    showLoading()
-                }
+        viewModelScope.launch(Dispatchers.IO) {
+            showLoading()
+            val result = signUpUseCase(email, password, username)
 
-                is DataResult.Success -> {
-                    Log.d(TAG, "Sign up success")
-                    hideLoading()
-                }
+            result.doIfSuccess {
 
-                is DataResult.Error -> {
-                    hideLoading()
-                    Log.d(TAG, "Error: ${it.throwable.localizedMessage}")
-                    it.throwable.printStackTrace()
-                    setError(it.throwable.localizedMessage ?: "Something went wrong")
-                }
             }
-        }.launchIn(viewModelScope)
+
+            result.doIfError {
+
+            }
+        }
     }
 }
 
