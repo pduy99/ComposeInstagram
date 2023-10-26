@@ -6,9 +6,9 @@ import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {
 
-    fun createUser(email: String, password: String, userName: String): Flow<DataResult<User>>
+    fun createUserWithEmailAndPassword(email: String, password: String): Flow<DataResult<User>>
 
-    fun authenticate(email: String, password: String): Flow<DataResult<Boolean>>
+    suspend fun authenticate(email: String, password: String)
 
     fun getCurrentUser(): Flow<DataResult<User?>>
 
@@ -16,5 +16,7 @@ interface UserRepository {
 
     fun getUserByUserId(id: String): Flow<DataResult<User?>>
 
-    fun updateUserData(user: User): Flow<DataResult<Unit>>
+    suspend fun updateUserData(user: User)
+
+    suspend fun removeCurrentUser()
 }

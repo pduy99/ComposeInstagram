@@ -8,7 +8,7 @@ const val USERS = "users"
 
 interface UserDataSource {
 
-    fun authenticate(email: String, password: String): Flow<DataResult<Boolean>>
+    suspend fun authenticate(email: String, password: String)
 
     fun getCurrentUser(): Flow<DataResult<User?>>
 
@@ -16,9 +16,9 @@ interface UserDataSource {
 
     fun getUserByUserId(id: String): Flow<DataResult<User?>>
 
-    fun updateUserData(user: User): Flow<DataResult<Unit>>
+    suspend fun updateUserData(user: User)
 
     fun createUserWithEmailAndPassword(email: String, password: String): Flow<DataResult<User>>
 
-    fun removeUser(userId: String): Flow<DataResult<Unit>>
+    suspend fun removeCurrentUser()
 }
